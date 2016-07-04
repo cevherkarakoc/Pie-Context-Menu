@@ -1,7 +1,10 @@
 
+var NS = "http://www.w3.org/2000/svg";
 var menuablesClass = "menuable";
+var menuButtonCount = 6;
 
 var menu = document.querySelector("#context-menu");
+var menu_svg = document.querySelector("#context-menu-svg");
 var menuState = 0;
 var active = "context-menu--active";
 
@@ -14,6 +17,9 @@ init();
 
 function init() {
     contextListener();
+
+    for(var i=0;i<menuButtonCount;i++)
+        createMenuButton(i);
 }
 
 function contextListener() {
@@ -45,22 +51,22 @@ function openMenu() {
 function positionMenu(e) {
   menuPosition = getPosition(e);
   
-  menuWidth = menu.offsetWidth + 4;
-  menuHeight = menu.offsetHeight + 4;
+  menuWidth = menu.offsetWidth ;
+  menuHeight = menu.offsetHeight ;
 
   windowWidth = window.innerWidth;
   windowHeight = window.innerHeight;
 
   if ( (windowWidth -  menuPosition.x) < menuWidth ) {
-    menu.style.left = (windowWidth - menuWidth-100) + "px";
+    menu.style.left = (windowWidth - 1.5*menuWidth) + "px";
   } else {
-    menu.style.left = (menuPosition.x-100) + "px";
+    menu.style.left = (menuPosition.x-menuWidth/2) + "px";
   }
 
-  if ( (windowHeight - menuPosition.y) < menuHeight+100 ) {
-    menu.style.top = (windowHeight - menuHeight) + "px";
+  if ( (windowHeight - menuPosition.y) < menuHeight ) {
+    menu.style.top = (windowHeight - 1.5*menuHeight) + "px";
   } else {
-    menu.style.top = (menuPosition.y-100) + "px";
+    menu.style.top = (menuPosition.y-menuHeight/2) + "px";
   }
 
 
@@ -104,4 +110,22 @@ function getPosition(e) {
     x: posx,
     y: posy
   }
+}
+
+function createMenuButton(text){
+    var menu_button = document.createElementNS(NS,"circle");
+    menu_button.setAttribute("r", 70);
+    menu_button.setAttribute("cx",  110);
+    menu_button.setAttribute("cy",  110);
+
+    var color = Math.round((Math.random()*600)+300);  
+    menu_button.setAttribute("stroke",  "#"+color);  
+
+    var size = 200/menuButtonCount+"%";
+    var space = (200/menuButtonCount*(text))+"%";
+    console.log(space);
+    menu_button.setAttribute("stroke-dasharray"
+                      ,"0% "+ space + " " + size + " 200%");
+
+    menu_svg.appendChild(menu_button)
 }
