@@ -1,7 +1,7 @@
 
 var NS = "http://www.w3.org/2000/svg";
 var menuablesClass = "menuable";
-var menuButtonCount = 3;
+var menuButtonCount = 24;
 
 var menu = document.querySelector("#context-menu");
 var menu_svg = document.querySelector("#context-menu-svg");
@@ -19,7 +19,7 @@ function init() {
     contextListener();
     var text="Button "
     for(var i=0;i<menuButtonCount;i++)
-        createMenuButton(i,text+i);
+        createMenuButton(i,text+i,'\uf1a0');
 }
 
 function contextListener() {
@@ -112,7 +112,7 @@ function getPosition(e) {
   }
 }
 
-function createMenuButton(index,text){
+function createMenuButton(index,text,icon){
     var menu_button_G = document.createElementNS(NS,"g");
     menu_button_G.setAttribute("transform", "translate(110,110)");
 
@@ -128,22 +128,49 @@ function createMenuButton(index,text){
     menu_button.setAttribute("stroke-dasharray", size + " 200%");
     menu_button.setAttribute("transform", "rotate("+rot +",0,0)");
     
-    menu_button.setAttribute("onmouseover"
-          ,"this.nextSibling.setAttribute('fill','rgba(40,33,37,1)')");
+    menu_button.setAttribute("onmouseover","menu_button_mouseover(this)");
     
-    menu_button.setAttribute("onmouseout"
-          ,"this.nextSibling.setAttribute('fill','rgba(0,0,0,0)')");
+    menu_button.setAttribute("onmouseout","menu_button_mouseout(this)");
     
 
-    var title = document.createElementNS(NS, "text");
-    title.textContent = text;
-    title.setAttribute("x", "-35");
-    title.setAttribute("y", "7");
-    title.setAttribute("fill", "rgba(0,0,0,0)");
-    title.setAttribute("font-size", "18");
-
+    var button_title = document.createElementNS(NS, "text");
+    button_title.textContent = text;
+    button_title.setAttribute("x", "-35");
+    button_title.setAttribute("y", "7");
+    button_title.setAttribute("fill", "rgba(0,0,0,0)");
+    //button_title.setAttribute("font-size", "18");
+    
+    var button_icon = document.createElementNS(NS, "text");
+    var iconRot = -1*(rot+(180/menuButtonCount));
+    var dot = polarToCartesian(70,iconRot);
+    button_icon.textContent = icon;
+    button_icon.setAttribute("x", dot.x-7);
+    button_icon.setAttribute("y", -dot.y+6);
+   // button_icon.setAttribute("transform","rotate("+iconRot +")");
+    button_icon.setAttribute("font-family", "FontAwesome");
     
     menu_button_G.appendChild(menu_button);
-    menu_button_G.appendChild(title);
+    menu_button_G.appendChild(button_title);
+    menu_button_G.appendChild(button_icon);
     menu_svg.appendChild(menu_button_G);
+}
+
+function polarToCartesian(r,alpha){
+  var rad = alpha * (Math.PI/180)
+  var dot={
+    x:r*Math.cos(rad),
+    y:r*Math.sin(rad)
+  };
+  console.log(alpha+" : "+dot.x+","+dot.y);
+  return dot;
+  
+}
+
+function menu_button_mouseover(menu_button){
+    menu_button.nextSibling.setAttribute('fill','rgba(40,33,37,1)');
+    menu_button.nextSibling.nextSibling.setAttribute('fill','white');
+}
+function menu_button_mouseout(menu_button){
+    menu_button.nextSibling.setAttribute('fill','rgba(0,0,0,0)');
+    menu_button.nextSibling.nextSibling.setAttribute('fill','black');
 }

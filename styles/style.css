@@ -17,14 +17,26 @@
   display: block;
 }
 
-circle {
+.context-menu circle {
   pointer-events: stroke;
   fill: rgba(0,0,0,0);
   stroke-width: 40;
 
 }
 
-circle:hover{
-  stroke: #555
+.context-menu circle:hover{
+  stroke: #555;
 }
 
+.context-menu text{
+  pointer-events: none;
+  font-size:18px;
+  -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+
+}
+.context-menu text::selection {
+    background: none;
+}
