@@ -1,42 +1,45 @@
+body{
+  background: #666;
+}
 .menuable{
     border:solid 1px black;
     background-color: blue;
     margin-bottom:  55px;
 }
 
-.context-menu {
+.pie-context-menu {
   display: none;
   position: absolute;
-  width: 220px;
-  height: 220px;
   margin:0;
   padding:0;
 }
 
-.context-menu--active {
+.pie-context-menu--active {
   display: block;
 }
 
-.context-menu circle {
+.pie-context-menu circle {
   pointer-events: stroke;
-  fill: rgba(0,0,0,0);
-  stroke-width: 40;
-
+  stroke:rgba(238, 236, 246,1);
+  
 }
 
-.context-menu circle:hover{
+.pie-context-menu circle:hover{
   stroke: #555;
 }
 
-.context-menu text{
+.pie-context-menu text{
   pointer-events: none;
-  font-size:18px;
   -webkit-user-select: none;
        -moz-user-select: none;
         -ms-user-select: none;
             user-select: none;
 
 }
-.context-menu text::selection {
+.pie-context-menu text::selection {
     background: none;
+}
+
+h3::before{
+  content:"beforoororo";
 }

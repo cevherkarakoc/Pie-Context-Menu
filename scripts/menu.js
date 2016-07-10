@@ -1,80 +1,121 @@
+"use strict";
+ var SVG_NS = "http://www.w3.org/2000/svg";
+var PieContextMenu=function (menu_id, menuablesClass,numberOfButton,menuSize) {
+    this.menuablesClass = menuablesClass;
+    this.numberOfButton = numberOfButton;
 
-var NS = "http://www.w3.org/2000/svg";
-var menuablesClass = "menuable";
-var menuButtonCount = 24;
+    this.menu;
+    this.menu_id = menu_id;
 
-var menu = document.querySelector("#context-menu");
-var menu_svg = document.querySelector("#context-menu-svg");
-var menuState = 0;
-var active = "context-menu--active";
+    this.menu_svg;
+    this.menu_svg_id= menu_id+"-svg";
 
-var menuWidth;
-var menuHeight;
-var windowWidth;
-var windowHeight;
+    this.menuState = 0;
+    this.active = "pie-context-menu--active";
+    this.menuSize = menuSize;
 
-init();
+    this.radius = this.menuSize/3;
+    this.stroke_width = this.menuSize/4;
+    this.font_size = Math.round(this.menuSize/12);
 
-function init() {
-    contextListener();
-    var text="Button "
-    for(var i=0;i<menuButtonCount;i++)
-        createMenuButton(i,text+i,'\uf1a0');
+    this.init();
 }
 
-function contextListener() {
+PieContextMenu.prototype.init = function() {
+    this.menu = document.createElement("nav");
+    this.menu.setAttribute("id",this.menu_id);
+    this.menu.setAttribute("class","pie-context-menu");
+    this.menu.setAttribute("width",this.menuSize);
+    this.menu.setAttribute("height",this.menuSize);
+
+    this.menu_svg = document.createElementNS(SVG_NS,"svg");
+    this.menu_svg.setAttribute("id",this.menu_svg_id);
+    this.menu_svg.setAttribute("width",this.menuSize);
+    this.menu_svg.setAttribute("height",this.menuSize);
+
+    this.menu.appendChild(this.menu_svg);
+    
+    this.create();
+
+    this.contextListener();
+
+    var center = document.createElementNS(SVG_NS,"circle");
+    center.setAttribute("r", this.radius);
+    center.setAttribute("transform",
+      "translate("+this.menuSize/2+","+this.menuSize/2+")");  
+    center.setAttribute("fill","rgba(166,178, 190,1)"); 
+    this.menu_svg.appendChild(center);
+
+    var text="Button "
+    for(var i=0;i<this.numberOfButton;i++)
+        this.createMenuButton(i,text+i,'fa-clipboard ');
+}
+
+PieContextMenu.prototype.create = function () {
+    var menu_node = document.getElementById(this.menu_id);
+    if(menu_node===null)
+        document.body.appendChild(this.menu);
+}
+
+PieContextMenu.prototype.destroy = function () {
+    var menu_node = document.getElementById(this.menu_id);
+    if(menu_node!=null)
+        document.body.removeChild(this.menu);
+}
+
+PieContextMenu.prototype.contextListener = function() {
+    var that = this;
   document.addEventListener( "contextmenu", function(e) {
-    if ( containsClass( e, menuablesClass ) ) {
+    if ( that.containsClass( e, that.menuablesClass ) ) {
       e.preventDefault();
-      openMenu();
-      positionMenu(e);
+      that.openMenu();
+      that.positionMenu(e);
     } else {
-      closeMenu();
+      that.closeMenu();
     }
   });
 }
 
-function closeMenu() {
-  if ( menuState !== 0 ) {
-    menuState = 0;
-    menu.classList.remove(active);
+PieContextMenu.prototype.closeMenu =function() {
+  if ( this.menuState !== 0 ) {
+    this.menuState = 0;
+    this.menu.classList.remove(this.active);
   }
 }
 
-function openMenu() {
-  if ( menuState !== 1 ) {
-    menuState = 1;
-    menu.classList.add(active);
+PieContextMenu.prototype.openMenu =function () {
+   
+  if ( this.menuState !== 1 ) {
+    this.menuState = 1;
+    this.menu.classList.add(this.active);
   }
 }
 
-function positionMenu(e) {
-  menuPosition = getPosition(e);
+PieContextMenu.prototype.positionMenu = function(e) {
+  var menuPosition = this.getPosition(e);
   
-  menuWidth = menu.offsetWidth ;
-  menuHeight = menu.offsetHeight ;
+  var menuWidth = this.menu.offsetWidth ;
+  var menuHeight = this.menu.offsetHeight ;
 
-  windowWidth = window.innerWidth;
-  windowHeight = window.innerHeight;
+  var windowWidth = window.innerWidth;
+  var windowHeight = window.innerHeight;
 
   if ( (windowWidth -  menuPosition.x) < menuWidth ) {
-    menu.style.left = (windowWidth - menuWidth) + "px";
+    this.menu.style.left = (windowWidth - menuWidth) + "px";
   } else {
-    menu.style.left = (menuPosition.x-menuWidth/2) + "px";
+    this.menu.style.left = (menuPosition.x-menuWidth/2) + "px";
   }
 
   if ( (windowHeight - menuPosition.y) < menuHeight ) {
-    menu.style.top = (windowHeight - menuHeight) + "px";
+    this.menu.style.top = (windowHeight - menuHeight) + "px";
   } else {
-    menu.style.top = (menuPosition.y-menuHeight/2) + "px";
+    this.menu.style.top = (menuPosition.y-menuHeight/2) + "px";
   }
 
 
 }
 
-
-
-function containsClass( e, className ) {
+PieContextMenu.prototype.containsClass = function ( e, className ) {
   var el = e.srcElement || e.target;
 
   if ( el.classList.contains(className) ) {
@@ -90,7 +131,7 @@ function containsClass( e, className ) {
   return false;
 }
 
-function getPosition(e) {
+PieContextMenu.prototype.getPosition = function (e) {
   var posx = 0;
   var posy = 0;
 
@@ -112,65 +153,80 @@ function getPosition(e) {
   }
 }
 
-function createMenuButton(index,text,icon){
-    var menu_button_G = document.createElementNS(NS,"g");
-    menu_button_G.setAttribute("transform", "translate(110,110)");
+PieContextMenu.prototype.createMenuButton = function (index,text,icon){
+    var radius = this.menuSize/3;
+    var stroke_width = this.menuSize/4;
+    var font_size = Math.round(this.menuSize/12);
 
-    var menu_button = document.createElementNS(NS,"circle");
-    menu_button.setAttribute("r", 70);
+    var menu_button_G = document.createElementNS(SVG_NS,"g");
+    menu_button_G.setAttribute("transform", 
+            "translate("+this.menuSize/2+","+this.menuSize/2+")");
 
-    var color = "rgba(238, 236, 246,1)";  
-    menu_button.setAttribute("stroke", color);  
+    var menu_button = document.createElementNS(SVG_NS,"circle");
+    menu_button.setAttribute("r", radius);
+  
+    menu_button.setAttribute("stroke-width", stroke_width);    
+    menu_button.setAttribute("fill", "rgba(0,0,0,0)");  
 
-    var size = (200/menuButtonCount)+0.5+"%";
-    var rot = -180+((360/menuButtonCount)*index);
+    var perimeter = Math.PI*2*radius;
+    var size = (perimeter/this.numberOfButton)+(perimeter/400);
+    var rot = -180+((360/this.numberOfButton)*index);
 
-    menu_button.setAttribute("stroke-dasharray", size + " 200%");
+    menu_button.setAttribute("stroke-dasharray", size +" "+perimeter);
     menu_button.setAttribute("transform", "rotate("+rot +",0,0)");
-    
     menu_button.setAttribute("onmouseover","menu_button_mouseover(this)");
-    
     menu_button.setAttribute("onmouseout","menu_button_mouseout(this)");
     
 
-    var button_title = document.createElementNS(NS, "text");
+    var button_title = document.createElementNS(SVG_NS, "text");
     button_title.textContent = text;
-    button_title.setAttribute("x", "-35");
-    button_title.setAttribute("y", "7");
+    button_title.setAttribute("x", -radius/2);
+    button_title.setAttribute("y", font_size/2);
     button_title.setAttribute("fill", "rgba(0,0,0,0)");
-    //button_title.setAttribute("font-size", "18");
+    button_title.setAttribute("font-size", font_size);
     
-    var button_icon = document.createElementNS(NS, "text");
-    var iconRot = -1*(rot+(180/menuButtonCount));
-    var dot = polarToCartesian(70,iconRot);
-    button_icon.textContent = icon;
-    button_icon.setAttribute("x", dot.x-7);
-    button_icon.setAttribute("y", -dot.y+6);
+    var temp_i = document.createElement("i");
+    temp_i.className = icon;
+    document.body.appendChild(temp_i);
+    var before = getComputedStyle(temp_i, ':before');
+    var cont = before.content;
+    cont = cont.substr(1);
+    cont = cont.substr(0,cont.length-1);
+    document.body.removeChild(temp_i);
+
+    var button_icon = document.createElementNS(SVG_NS, "text");
+    var iconRot = -1*(rot+(180/this.numberOfButton));
+    var dot = this.polarToCartesian(radius,iconRot);
+    button_icon.textContent = cont;
+    button_icon.setAttribute("x", dot.x-(font_size/2));
+    button_icon.setAttribute("y", -dot.y+(font_size/2));
    // button_icon.setAttribute("transform","rotate("+iconRot +")");
     button_icon.setAttribute("font-family", "FontAwesome");
+    button_icon.setAttribute("font-size",font_size);
+    button_icon.setAttribute("class", "fa-code");
     
     menu_button_G.appendChild(menu_button);
     menu_button_G.appendChild(button_title);
     menu_button_G.appendChild(button_icon);
-    menu_svg.appendChild(menu_button_G);
+   
+    this.menu_svg.appendChild(menu_button_G);
 }
 
-function polarToCartesian(r,alpha){
+PieContextMenu.prototype.polarToCartesian = function (r,alpha){
   var rad = alpha * (Math.PI/180)
   var dot={
     x:r*Math.cos(rad),
     y:r*Math.sin(rad)
   };
-  console.log(alpha+" : "+dot.x+","+dot.y);
   return dot;
   
 }
 
-function menu_button_mouseover(menu_button){
+var menu_button_mouseover = function (menu_button){
     menu_button.nextSibling.setAttribute('fill','rgba(40,33,37,1)');
     menu_button.nextSibling.nextSibling.setAttribute('fill','white');
 }
-function menu_button_mouseout(menu_button){
+var menu_button_mouseout = function (menu_button){
     menu_button.nextSibling.setAttribute('fill','rgba(0,0,0,0)');
     menu_button.nextSibling.nextSibling.setAttribute('fill','black');
 }
