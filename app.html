@@ -6,20 +6,18 @@
 
 	<link href="styles/w3.css" rel="stylesheet" />
 	<link href="styles/style.css" rel="stylesheet" />
-
-	 <script src="https://use.fontawesome.com/ae83699d7d.js"></script>
+  <link href="font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet" /> 
 </head>
 
 <body>
-<nav id="context-menu" class="context-menu">
-  <svg id="context-menu-svg" width="220" height="220">
-      
-  </svg>
-</nav>
-
   <div id="first" class="menuable"> Birinci</div>
   <div id="second" class="menuable">İkinci</div>
   <div id="third" class="menuable">Üçüncü</div>
 
   <script src="scripts/menu.js"></script>
+  <script>
+    var my_menu = new PieContextMenu(
+      "context-menu","menuable",8,420
+      );
+  </script>
 </body>
