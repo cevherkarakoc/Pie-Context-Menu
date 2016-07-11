@@ -14,41 +14,23 @@ var PieContextMenu=function (menu_id, menuablesClass,numberOfButton,menuSize) {
     this.active = "pie-context-menu--active";
     this.menuSize = menuSize;
 
-    this.radius = this.menuSize/3;
-    this.stroke_width = this.menuSize/4;
-    this.font_size = Math.round(this.menuSize/12);
+    this.radius;
+    this.stroke_width;
+    this.font_size;
 
     this.init();
 }
 
 PieContextMenu.prototype.init = function() {
     this.menu = document.createElement("nav");
-    this.menu.setAttribute("id",this.menu_id);
-    this.menu.setAttribute("class","pie-context-menu");
-    this.menu.setAttribute("width",this.menuSize);
-    this.menu.setAttribute("height",this.menuSize);
-
     this.menu_svg = document.createElementNS(SVG_NS,"svg");
-    this.menu_svg.setAttribute("id",this.menu_svg_id);
-    this.menu_svg.setAttribute("width",this.menuSize);
-    this.menu_svg.setAttribute("height",this.menuSize);
-
     this.menu.appendChild(this.menu_svg);
-    
+
+    this.reset();
     this.create();
 
     this.contextListener();
-
-    var center = document.createElementNS(SVG_NS,"circle");
-    center.setAttribute("r", this.radius);
-    center.setAttribute("transform",
-      "translate("+this.menuSize/2+","+this.menuSize/2+")");  
-    center.setAttribute("fill","rgba(166,178, 190,1)"); 
-    this.menu_svg.appendChild(center);
-
-    var text="Button "
-    for(var i=0;i<this.numberOfButton;i++)
-        this.createMenuButton(i,text+i,'fa-clipboard ');
+    
 }
 
 PieContextMenu.prototype.create = function () {
@@ -61,6 +43,31 @@ PieContextMenu.prototype.destroy = function () {
     var menu_node = document.getElementById(this.menu_id);
     if(menu_node!=null)
         document.body.removeChild(this.menu);
+}
+
+PieContextMenu.prototype.reset = function () {
+    this.closeMenu();
+    
+    var paras = document.getElementsByClassName("pcm_group");
+
+    while(paras[0]) {
+        paras[0].parentNode.removeChild(paras[0]);
+    }
+
+    this.radius = this.menuSize/3;
+    this.stroke_width = this.menuSize/4;
+    this.font_size = Math.round(this.menuSize/12);
+
+    this.menu.setAttribute("id",this.menu_id);
+    this.menu.setAttribute("class","pie-context-menu");
+    this.menu.setAttribute("width",this.menuSize);
+    this.menu.setAttribute("height",this.menuSize);
+
+    this.menu_svg.setAttribute("id",this.menu_svg_id);
+    this.menu_svg.setAttribute("width",this.menuSize);
+    this.menu_svg.setAttribute("height",this.menuSize);
+
+    this.draw(); 
 }
 
 PieContextMenu.prototype.contextListener = function() {
@@ -153,23 +160,38 @@ PieContextMenu.prototype.getPosition = function (e) {
   }
 }
 
+PieContextMenu.prototype.draw = function () {
+    var center = document.createElementNS(SVG_NS,"circle");
+    center.setAttribute("class", "pcm_center pcm_group");
+    center.setAttribute("r", this.radius);
+    center.setAttribute("transform",
+      "translate("+this.menuSize/2+","+this.menuSize/2+")");  
+    this.menu_svg.appendChild(center);
+
+    var text="Button "
+    for(var i=0;i<this.numberOfButton;i++)
+        this.createMenuButton(i,text+i,'fa-clipboard ');
+}
+
 PieContextMenu.prototype.createMenuButton = function (index,text,icon){
-    var radius = this.menuSize/3;
-    var stroke_width = this.menuSize/4;
-    var font_size = Math.round(this.menuSize/12);
+    var radius = this.radius;
+    var stroke_width = this.stroke_width;
+    var font_size = Math.round(this.font_size);
 
     var menu_button_G = document.createElementNS(SVG_NS,"g");
+    menu_button_G.setAttribute("id",this.menu_id+"_button_"+(index+1));
+    menu_button_G.setAttribute("class","pcm_group");
     menu_button_G.setAttribute("transform", 
             "translate("+this.menuSize/2+","+this.menuSize/2+")");
 
     var menu_button = document.createElementNS(SVG_NS,"circle");
+    menu_button.setAttribute("class","pcm_button");
     menu_button.setAttribute("r", radius);
-  
-    menu_button.setAttribute("stroke-width", stroke_width);    
+    menu_button.setAttribute("stroke-width", stroke_width);  
     menu_button.setAttribute("fill", "rgba(0,0,0,0)");  
 
     var perimeter = Math.PI*2*radius;
-    var size = (perimeter/this.numberOfButton)+(perimeter/400);
+    var size = (perimeter/this.numberOfButton)+(perimeter/500);
     var rot = -180+((360/this.numberOfButton)*index);
 
     menu_button.setAttribute("stroke-dasharray", size +" "+perimeter);
@@ -180,10 +202,11 @@ PieContextMenu.prototype.createMenuButton = function (index,text,icon){
 
     var button_title = document.createElementNS(SVG_NS, "text");
     button_title.textContent = text;
+    button_title.setAttribute("class", "pcm_title");
     button_title.setAttribute("x", -radius/2);
     button_title.setAttribute("y", font_size/2);
-    button_title.setAttribute("fill", "rgba(0,0,0,0)");
     button_title.setAttribute("font-size", font_size);
+    button_title.setAttribute("display", "none");
     
     var temp_i = document.createElement("i");
     temp_i.className = icon;
@@ -196,15 +219,14 @@ PieContextMenu.prototype.createMenuButton = function (index,text,icon){
 
     var button_icon = document.createElementNS(SVG_NS, "text");
     var iconRot = -1*(rot+(180/this.numberOfButton));
-    var dot = this.polarToCartesian(radius,iconRot);
+    var dot = polarToCartesian(radius,iconRot);
     button_icon.textContent = cont;
+    button_icon.setAttribute("class","pcm_icon");
     button_icon.setAttribute("x", dot.x-(font_size/2));
     button_icon.setAttribute("y", -dot.y+(font_size/2));
-   // button_icon.setAttribute("transform","rotate("+iconRot +")");
     button_icon.setAttribute("font-family", "FontAwesome");
     button_icon.setAttribute("font-size",font_size);
-    button_icon.setAttribute("class", "fa-code");
-    
+
     menu_button_G.appendChild(menu_button);
     menu_button_G.appendChild(button_title);
     menu_button_G.appendChild(button_icon);
@@ -212,7 +234,12 @@ PieContextMenu.prototype.createMenuButton = function (index,text,icon){
     this.menu_svg.appendChild(menu_button_G);
 }
 
-PieContextMenu.prototype.polarToCartesian = function (r,alpha){
+PieContextMenu.prototype.resize = function (newSize) {
+    this.menuSize = newSize;
+    this.reset();
+}
+
+var polarToCartesian = function (r,alpha){
   var rad = alpha * (Math.PI/180)
   var dot={
     x:r*Math.cos(rad),
@@ -223,10 +250,10 @@ PieContextMenu.prototype.polarToCartesian = function (r,alpha){
 }
 
 var menu_button_mouseover = function (menu_button){
-    menu_button.nextSibling.setAttribute('fill','rgba(40,33,37,1)');
-    menu_button.nextSibling.nextSibling.setAttribute('fill','white');
+    menu_button.nextSibling.setAttribute('display','inline');
+    menu_button.nextSibling.nextSibling.classList.add("pcm_icon--hover");
 }
 var menu_button_mouseout = function (menu_button){
-    menu_button.nextSibling.setAttribute('fill','rgba(0,0,0,0)');
-    menu_button.nextSibling.nextSibling.setAttribute('fill','black');
+    menu_button.nextSibling.setAttribute('display','none');
+    menu_button.nextSibling.nextSibling.classList.remove("pcm_icon--hover");
 }

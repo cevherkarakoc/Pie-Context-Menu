@@ -7,6 +7,8 @@ body{
     margin-bottom:  55px;
 }
 
+/* CORE BEGIN */
+
 .pie-context-menu {
   display: none;
   position: absolute;
@@ -18,14 +20,13 @@ body{
   display: block;
 }
 
-.pie-context-menu circle {
-  pointer-events: stroke;
-  stroke:rgba(238, 236, 246,1);
-  
+.pie-context-menu svg {
+  width: 100%;
+
 }
 
-.pie-context-menu circle:hover{
-  stroke: #555;
+.pie-context-menu circle {
+  pointer-events: stroke;
 }
 
 .pie-context-menu text{
@@ -40,6 +41,31 @@ body{
     background: none;
 }
 
-h3::before{
-  content:"beforoororo";
+/* CORE END */
+
+/* PCM Options BEGIN */
+
+.pie-context-menu circle.pcm_center{
+  fill:rgba(166,178, 190,1);
 }
+
+.pie-context-menu circle.pcm_button{
+  stroke:rgba(238, 236, 246,1);
+}
+.pie-context-menu circle.pcm_button:hover{
+  stroke: #555;
+}
+
+.pie-context-menu text.pcm_title{
+  fill:#222;
+}
+
+.pie-context-menu text.pcm_icon{
+  fill:#222;
+}
+
+.pie-context-menu text.pcm_icon--hover{
+  fill:#eee;
+}
+
+/* PCM Options END */
