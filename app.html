@@ -17,9 +17,22 @@
   <script src="scripts/menu.js"></script>
   <script>
     var my_menu = new PieContextMenu(
-      "context-menu","menuable",8,220
+      "my_menu","menuable",4,100
       );
-      my_menu.resize(100);
-      my_menu.resize(250);
+
+      my_menu.buttons[0].changeText("Facebook");
+      my_menu.buttons[0].changeIcon("fa-facebook");
+
+      my_menu.buttons[1].changeText("Twitter");
+      my_menu.buttons[1].changeIcon("fa-twitter");
+
+      my_menu.buttons[2].changeText("Github");
+      my_menu.buttons[2].changeIcon("fa-github");
+
+      my_menu.buttons[0].DOMelement.addEventListener("click",function(){
+        console.log("facebook");
+      })
+      my_menu.resize(200);
+
   </script>
 </body>

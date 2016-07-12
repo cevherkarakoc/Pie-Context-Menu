@@ -20,12 +20,14 @@ body{
   display: block;
 }
 
+
 .pie-context-menu svg {
   width: 100%;
 
 }
 
 .pie-context-menu circle {
+  fill:rgba(0,0,0,0); 
   pointer-events: stroke;
 }
 
@@ -35,6 +37,7 @@ body{
        -moz-user-select: none;
         -ms-user-select: none;
             user-select: none;
+  text-anchor: middle;
 
 }
 .pie-context-menu text::selection {
@@ -50,9 +53,10 @@ body{
 }
 
 .pie-context-menu circle.pcm_button{
+  
   stroke:rgba(238, 236, 246,1);
 }
-.pie-context-menu circle.pcm_button:hover{
+.pie-context-menu circle.pcm_button--hover{
   stroke: #555;
 }
 

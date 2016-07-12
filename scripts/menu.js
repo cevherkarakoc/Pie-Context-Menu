@@ -8,7 +8,9 @@ var PieContextMenu=function (menu_id, menuablesClass,numberOfButton,menuSize) {
     this.menu_id = menu_id;
 
     this.menu_svg;
-    this.menu_svg_id= menu_id+"-svg";
+    this.menu_svg_id= menu_id+"_svg";
+
+    this.center;
 
     this.menuState = 0;
     this.active = "pie-context-menu--active";
@@ -18,13 +20,31 @@ var PieContextMenu=function (menu_id, menuablesClass,numberOfButton,menuSize) {
     this.stroke_width;
     this.font_size;
 
+    this.buttons = [];
     this.init();
+}
+
+PieContextMenu.Button = function (index,text,icon) {
+    this.index = index;
+    this.text  = text;
+    this.icon = icon;
+    this.isNew = true;
+    this.DOMelement;
 }
 
 PieContextMenu.prototype.init = function() {
     this.menu = document.createElement("nav");
     this.menu_svg = document.createElementNS(SVG_NS,"svg");
     this.menu.appendChild(this.menu_svg);
+
+    this.center = document.createElementNS(SVG_NS,"circle");  
+    this.menu_svg.appendChild(this.center);
+
+    for(var i=0;i<this.numberOfButton;i++){
+        var text="Button "+(i+1);
+        var icon="fa-circle";
+        this.buttons[i] = new PieContextMenu.Button(i,text,icon);
+    }
 
     this.reset();
     this.create();
@@ -48,14 +68,8 @@ PieContextMenu.prototype.destroy = function () {
 PieContextMenu.prototype.reset = function () {
     this.closeMenu();
     
-    var paras = document.getElementsByClassName("pcm_group");
-
-    while(paras[0]) {
-        paras[0].parentNode.removeChild(paras[0]);
-    }
-
     this.radius = this.menuSize/3;
-    this.stroke_width = this.menuSize/4;
+    this.stroke_width = this.menuSize/5;
     this.font_size = Math.round(this.menuSize/12);
 
     this.menu.setAttribute("id",this.menu_id);
@@ -161,77 +175,60 @@ PieContextMenu.prototype.getPosition = function (e) {
 }
 
 PieContextMenu.prototype.draw = function () {
-    var center = document.createElementNS(SVG_NS,"circle");
-    center.setAttribute("class", "pcm_center pcm_group");
-    center.setAttribute("r", this.radius);
-    center.setAttribute("transform",
-      "translate("+this.menuSize/2+","+this.menuSize/2+")");  
-    this.menu_svg.appendChild(center);
 
-    var text="Button "
-    for(var i=0;i<this.numberOfButton;i++)
-        this.createMenuButton(i,text+i,'fa-clipboard ');
+    PieContextMenu.setCenterCircle(this.center,this.radius,this.menuSize);
+    for(var i=0;i<this.numberOfButton;i++){
+        this.createMenuButton(this.buttons[i]);
+    }
+        
 }
 
-PieContextMenu.prototype.createMenuButton = function (index,text,icon){
+PieContextMenu.prototype.createMenuButton = function (button){
+    var index = button.index;
+    var text = button.text;
+    var icon = button.icon;
+
     var radius = this.radius;
     var stroke_width = this.stroke_width;
-    var font_size = Math.round(this.font_size);
+    var font_size = this.font_size;
+    var nob =this.numberOfButton;
 
-    var menu_button_G = document.createElementNS(SVG_NS,"g");
-    menu_button_G.setAttribute("id",this.menu_id+"_button_"+(index+1));
-    menu_button_G.setAttribute("class","pcm_group");
-    menu_button_G.setAttribute("transform", 
-            "translate("+this.menuSize/2+","+this.menuSize/2+")");
-
-    var menu_button = document.createElementNS(SVG_NS,"circle");
-    menu_button.setAttribute("class","pcm_button");
-    menu_button.setAttribute("r", radius);
-    menu_button.setAttribute("stroke-width", stroke_width);  
-    menu_button.setAttribute("fill", "rgba(0,0,0,0)");  
-
-    var perimeter = Math.PI*2*radius;
-    var size = (perimeter/this.numberOfButton)+(perimeter/500);
-    var rot = -180+((360/this.numberOfButton)*index);
-
-    menu_button.setAttribute("stroke-dasharray", size +" "+perimeter);
-    menu_button.setAttribute("transform", "rotate("+rot +",0,0)");
-    menu_button.setAttribute("onmouseover","menu_button_mouseover(this)");
-    menu_button.setAttribute("onmouseout","menu_button_mouseout(this)");
+    var menu_button_G;
+    var menu_button;
+    var button_title;
+    var button_icon;
+    var g_id;
+    if(this.buttons[index].isNew){
+        var menu_button_G = document.createElementNS(SVG_NS,"g");
+        var menu_button = document.createElementNS(SVG_NS,"circle");
+        var button_title = document.createElementNS(SVG_NS, "text");
+        var button_icon = document.createElementNS(SVG_NS, "text");
+        
+        var g_id=this.menu_id+"_button_"+(index+1);
+        
+        menu_button_G.appendChild(menu_button);
+        menu_button_G.appendChild(button_title);
+        menu_button_G.appendChild(button_icon);
     
+        this.menu_svg.appendChild(menu_button_G);
+        button.DOMelement=menu_button_G;
+        
+        this.buttons[index].isNew=false;
+    }else{
+        var menu_button_G = this.buttons[index].DOMelement;
+        var menu_button =this.buttons[index].DOMelement.childNodes[0];
+        var button_title = this.buttons[index].DOMelement.childNodes[1];
+        var button_icon = this.buttons[index].DOMelement.childNodes[2];
+        
+        var g_id=this.buttons[index].DOMelement.id;
+    }
 
-    var button_title = document.createElementNS(SVG_NS, "text");
-    button_title.textContent = text;
-    button_title.setAttribute("class", "pcm_title");
-    button_title.setAttribute("x", -radius/2);
-    button_title.setAttribute("y", font_size/2);
-    button_title.setAttribute("font-size", font_size);
-    button_title.setAttribute("display", "none");
-    
-    var temp_i = document.createElement("i");
-    temp_i.className = icon;
-    document.body.appendChild(temp_i);
-    var before = getComputedStyle(temp_i, ':before');
-    var cont = before.content;
-    cont = cont.substr(1);
-    cont = cont.substr(0,cont.length-1);
-    document.body.removeChild(temp_i);
+    PieContextMenu.setMenuButtonG(menu_button_G,g_id,this.menuSize);
 
-    var button_icon = document.createElementNS(SVG_NS, "text");
-    var iconRot = -1*(rot+(180/this.numberOfButton));
-    var dot = polarToCartesian(radius,iconRot);
-    button_icon.textContent = cont;
-    button_icon.setAttribute("class","pcm_icon");
-    button_icon.setAttribute("x", dot.x-(font_size/2));
-    button_icon.setAttribute("y", -dot.y+(font_size/2));
-    button_icon.setAttribute("font-family", "FontAwesome");
-    button_icon.setAttribute("font-size",font_size);
+    PieContextMenu.setMenuButton(menu_button,radius,stroke_width,index,nob);
+    PieContextMenu.setMenuTitle(button_title,text,font_size);
+    PieContextMenu.setMenuIcon(button_icon,icon,radius,index,nob,font_size);
 
-    menu_button_G.appendChild(menu_button);
-    menu_button_G.appendChild(button_title);
-    menu_button_G.appendChild(button_icon);
-   
-    this.menu_svg.appendChild(menu_button_G);
 }
 
 PieContextMenu.prototype.resize = function (newSize) {
@@ -239,7 +236,82 @@ PieContextMenu.prototype.resize = function (newSize) {
     this.reset();
 }
 
-var polarToCartesian = function (r,alpha){
+PieContextMenu.Button.prototype.changeText = function (newText) {
+    this.text = newText;
+    this.DOMelement.childNodes[1].textContent=this.text;
+}
+
+PieContextMenu.Button.prototype.changeIcon = function (newIcon) {
+    this.icon = newIcon;
+    var cont = PieContextMenu.faviconClassToText(this.icon);
+    this.DOMelement.childNodes[2].textContent=cont;
+}
+
+/* HELPER METHODS */
+PieContextMenu.setMenuButtonG = function (menu_button_G,id,size) {
+    
+    menu_button_G.setAttribute("id",id);
+    menu_button_G.setAttribute("class","pcm_group");
+    menu_button_G.setAttribute("transform", 
+            "translate("+size/2+","+size/2+")");
+    menu_button_G.setAttribute("onmouseover",
+        "PieContextMenu.menu_button_mouseover(this)");
+    menu_button_G.setAttribute("onmouseout",
+        "PieContextMenu.menu_button_mouseout(this)");
+   // menu_button_G.setAttribute("onclick","deneme()");
+    return menu_button_G;
+}
+
+PieContextMenu.setMenuButton = function (menu_button,radius,stroke_width,index,numberOfButton) {
+    
+    menu_button.setAttribute("class","pcm_button");
+    menu_button.setAttribute("r", radius);
+    menu_button.setAttribute("stroke-width", stroke_width);  
+    
+    var perimeter = Math.PI*2*radius;
+    var size = (perimeter/numberOfButton)+(perimeter/500);
+    var rot = -180+((360/numberOfButton)*index);
+
+    menu_button.setAttribute("stroke-dasharray", size +" "+perimeter);
+    menu_button.setAttribute("transform", "rotate("+rot +",0,0)");
+
+    return menu_button;
+}
+
+PieContextMenu.setMenuTitle = function (button_title,text,font_size) {
+    
+    button_title.textContent = text;
+    button_title.setAttribute("class", "pcm_title");
+    button_title.setAttribute("y", "0.35em");
+    button_title.setAttribute("font-size", font_size);
+    button_title.setAttribute("display", "none");
+    return button_title;
+}
+
+PieContextMenu.setMenuIcon = function (button_icon,icon,radius,index,numberOfButton,font_size) {
+    var cont = PieContextMenu.faviconClassToText(icon);
+    var rot = -180+((360/numberOfButton)*index);
+    
+    var iconRot = -1*(rot+(180/numberOfButton));
+    var dot = PieContextMenu.polarToCartesian(radius,iconRot);
+    button_icon.textContent = cont;
+    button_icon.setAttribute("class","pcm_icon");
+    button_icon.setAttribute("x", dot.x);
+    button_icon.setAttribute("y", -dot.y);
+    button_icon.setAttribute("dy", "0.35em");
+    button_icon.setAttribute("font-family", "FontAwesome");
+    button_icon.setAttribute("font-size",font_size);
+    return button_icon;
+}
+
+PieContextMenu.setCenterCircle = function (center,radius,size) {
+    center.setAttribute("class", "pcm_center");
+    center.setAttribute("r", radius);
+    center.setAttribute("transform",
+      "translate("+size/2+","+size/2+")"); 
+}
+
+PieContextMenu.polarToCartesian = function (r,alpha){
   var rad = alpha * (Math.PI/180)
   var dot={
     x:r*Math.cos(rad),
@@ -249,11 +321,33 @@ var polarToCartesian = function (r,alpha){
   
 }
 
-var menu_button_mouseover = function (menu_button){
-    menu_button.nextSibling.setAttribute('display','inline');
-    menu_button.nextSibling.nextSibling.classList.add("pcm_icon--hover");
+PieContextMenu.faviconClassToText = function (favClass) {
+    var temp_i = document.createElement("i");
+    temp_i.className = favClass;
+    document.body.appendChild(temp_i);
+    var before = getComputedStyle(temp_i, ':before');
+    var cont = before.content;
+    cont = cont.substr(1);
+    cont = cont.substr(0,cont.length-1);
+    document.body.removeChild(temp_i);
+    return cont;
 }
-var menu_button_mouseout = function (menu_button){
-    menu_button.nextSibling.setAttribute('display','none');
-    menu_button.nextSibling.nextSibling.classList.remove("pcm_icon--hover");
+/* HELPER METHOD END */
+
+/* EVENT FUNCTION */
+PieContextMenu.menu_button_mouseover = function (menu_button){
+    menu_button.childNodes[0].classList.add("pcm_button--hover");
+    menu_button.childNodes[1].setAttribute('display','inline');
+    menu_button.childNodes[2].classList.add("pcm_icon--hover");
+}
+PieContextMenu.menu_button_mouseout = function (menu_button){
+    menu_button.childNodes[0].classList.remove("pcm_button--hover");
+    menu_button.childNodes[1].setAttribute('display','none');
+    menu_button.childNodes[2].classList.remove("pcm_icon--hover");
+}
+
+/* EVENT FUNCTION END */
+
+function deneme() {
+    console.log("Workssss");
 }
