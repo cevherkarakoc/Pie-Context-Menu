@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Pie Menu</title>
+  <BASE href="../">
+
+	<link href="./dist/pie-cm_core.min.css" rel="stylesheet" />
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" 
+  rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+  <style>
+    body{
+      font-family: Sans-serif;
+
+      font:sans;
+    }
+    .menuable{
+      width: 200px;
+      height: 200px;
+      background-color: #BCFFA5;
+      border:1px solid #444;
+      border-radius:7px;
+      position: absolute;
+      top:0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      text-align:center;
+      line-height:200px;
+      box-shadow:0 0 15px 2px #222;
+      font-size:21px;
+    }
+
+    #my_menu .pcm_title{
+      font-size:14px;
+      fill:white;
+    }
+    #my_menu .pcm_icon{
+      font-size:28px;
+    }
+    #my_menu .pcm_center{
+      fill:rgba(0,0,0,0.5)
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="first" class="menuable"> Right Click Me!!! </div>
+
+  <script src="./dist/pie-cm.min.js"></script>
+
+  <script>
+    var my_menu = new PieContextMenu(
+      "my_menu","menuable",3,220
+    );
+
+    my_menu.buttons[0].changeText("Delete");
+    my_menu.buttons[0].changeIcon("fa-trash");
+
+    my_menu.buttons[1].changeText("Change Color");
+    my_menu.buttons[1].changeIcon("fa-recycle ");
+
+    my_menu.buttons[2].changeText("Copy Secret");
+    my_menu.buttons[2].changeIcon("fa-user-secret ");
+
+    my_menu.buttons[0].DOMelement.addEventListener("click",sayIm);
+    my_menu.buttons[1].DOMelement.addEventListener("click",cColor);
+    my_menu.buttons[2].DOMelement.addEventListener("click",secret);
+
+    function sayIm(message){
+      alert("I am immortal");
+    }
+
+    function cColor(){
+      my_menu.selectedElement.style.backgroundColor = '#'+Math.floor(Math.random()*16777215).toString(16);;
+    }
+
+    function secret(){
+      window.prompt("Copy to clipboard: Ctrl+C, Enter", "42");
+    }
+
+  </script>
+
+  
+</body>

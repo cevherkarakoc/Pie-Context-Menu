@@ -20,7 +20,10 @@ var PieContextMenu=function (menu_id, menuablesClass,numberOfButton,menuSize) {
     this.stroke_width;
     this.font_size;
 
+    this.selectedElement=null;
+
     this.buttons = [];
+
     this.init();
 }
 
@@ -90,6 +93,7 @@ PieContextMenu.prototype.contextListener = function() {
     if ( that.containsClass( e, that.menuablesClass ) ) {
       e.preventDefault();
       that.openMenu();
+      that.selectedElement = e.target;
       that.positionMenu(e);
     } else {
       that.closeMenu();
@@ -101,6 +105,7 @@ PieContextMenu.prototype.closeMenu =function() {
   if ( this.menuState !== 0 ) {
     this.menuState = 0;
     this.menu.classList.remove(this.active);
+    this.selectedElement = null;
   }
 }
 

@@ -1,0 +1,33 @@
+{
+  "name": "html-pie-context-menu",
+  "version": "0.1.0",
+  "description": "Pie Menu for Webpages",
+  "main": "src/pie-cm.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cevherkarakoc/HTML-Pie-Context-Menu.git"
+  },
+  "keywords": [
+    "context",
+    "menu",
+    "right",
+    "click"
+  ],
+  "author": "Cevher V. Karakoc",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/cevherkarakoc/HTML-Pie-Context-Menu/issues"
+  },
+  "homepage": "https://github.com/cevherkarakoc/HTML-Pie-Context-Menu#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^2.0.11",
+    "gulp-minify": "0.0.12"
+  }
+}
