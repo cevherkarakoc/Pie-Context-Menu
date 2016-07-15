@@ -4,6 +4,8 @@
   position: absolute;
   margin:0;
   padding:0;
+  pointer-events: none;
+  z-index: 1001;
 }
 
 .pie-context-menu--active {
@@ -17,6 +19,7 @@
 
 .pie-context-menu circle {
   fill:rgba(0,0,0,0); 
+  cursor:pointer;
   pointer-events: stroke;
 }
 

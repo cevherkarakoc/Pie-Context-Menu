@@ -5,21 +5,23 @@
 	<title>Pie Menu</title>
   <BASE href="../">
 
-	<link href="./dist/pie-cm_core.min.css" rel="stylesheet" />
+  <script src="./src/pie-cm.js"></script>
+
+	<link href="./src/pie-cm_core.css" rel="stylesheet" />
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" 
   rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
   <style>
     body{
       font-family: Sans-serif;
-
-      font:sans;
+      background-color:#ff7850;
+      color:white;
     }
     .menuable{
       width: 200px;
       height: 200px;
       background-color: #BCFFA5;
-      border:1px solid #444;
-      border-radius:7px;
+      color:#444;
+      border-radius:3px;
       position: absolute;
       top:0;
       bottom: 0;
@@ -28,8 +30,10 @@
       margin: auto;
       text-align:center;
       line-height:200px;
-      box-shadow:0 0 15px 2px #222;
+      box-shadow:0px 8px 16px 0px rgba(0,0,0,0.2), 0px 6px 16px 0px rgba(0,0,0,0.19);
       font-size:21px;
+
+      cursor:context-menu;
     }
 
     #my_menu .pcm_title{
@@ -46,28 +50,26 @@
 </head>
 
 <body>
+  <center><h1>Pie Context Menu Demo 1 - Simple</h1></center>
 
   <div id="first" class="menuable"> Right Click Me!!! </div>
 
-  <script src="./dist/pie-cm.min.js"></script>
 
   <script>
-    var my_menu = new PieContextMenu(
-      "my_menu","menuable",3,220
-    );
+    var my_menu = new PieContextMenu({
+      menuID:"my_menu",
+      menuItemClass:"menuable",
+      menuSize:220
+    });
 
-    my_menu.buttons[0].changeText("Delete");
-    my_menu.buttons[0].changeIcon("fa-trash");
+    my_menu.addButton("Delete","fa-trash");
+    my_menu.addButton("Change Color","fa-recycle");
+    my_menu.addButton("Release","fa-user-secret");
 
-    my_menu.buttons[1].changeText("Change Color");
-    my_menu.buttons[1].changeIcon("fa-recycle ");
+    my_menu.buttons[0].DOMelement.addEventListener("click",sayIm,false);
+    my_menu.buttons[1].DOMelement.addEventListener("click",cColor,false);
+    my_menu.buttons[2].DOMelement.addEventListener("click",secret,false);  
 
-    my_menu.buttons[2].changeText("Copy Secret");
-    my_menu.buttons[2].changeIcon("fa-user-secret ");
-
-    my_menu.buttons[0].DOMelement.addEventListener("click",sayIm);
-    my_menu.buttons[1].DOMelement.addEventListener("click",cColor);
-    my_menu.buttons[2].DOMelement.addEventListener("click",secret);
 
     function sayIm(message){
       alert("I am immortal");
@@ -77,8 +79,14 @@
       my_menu.selectedElement.style.backgroundColor = '#'+Math.floor(Math.random()*16777215).toString(16);;
     }
 
+    var sh=16;
+    var ri=0;
     function secret(){
-      window.prompt("Copy to clipboard: Ctrl+C, Enter", "42");
+      var elm = document.getElementById("first");
+      sh+=10;
+      ri+=10;
+      var shadow = "0px 8px "+sh+"px "+ri+"px";
+      elm.style.boxShadow = shadow+" rgba(0,0,0,0.2), "+shadow+" rgba(0,0,0,0.19)";
     }
 
   </script>

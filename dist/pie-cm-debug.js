@@ -1,20 +1,21 @@
 "use strict";
  var SVG_NS = "http://www.w3.org/2000/svg";
-var PieContextMenu=function (menu_id, menuablesClass,numberOfButton,menuSize) {
-    this.menuablesClass = menuablesClass;
-    this.numberOfButton = numberOfButton;
+var PieContextMenu=function (menuObject) {
+
+    this.menuablesClass = menuObject.menuItemClass;
+    this.numberOfButton = 0;
 
     this.menu;
-    this.menu_id = menu_id;
+    this.menu_id = menuObject.menuID;
 
     this.menu_svg;
-    this.menu_svg_id= menu_id+"_svg";
+    this.menu_svg_id= this.menu_id+"_svg";
 
     this.center;
 
     this.menuState = 0;
     this.active = "pie-context-menu--active";
-    this.menuSize = menuSize;
+    this.menuSize = menuObject.menuSize;
 
     this.radius;
     this.stroke_width;
@@ -53,7 +54,8 @@ PieContextMenu.prototype.init = function() {
     this.create();
 
     this.contextListener();
-    
+    this.leftClickListener();
+    this.keyupListener();
 }
 
 PieContextMenu.prototype.create = function () {
@@ -89,24 +91,44 @@ PieContextMenu.prototype.reset = function () {
 
 PieContextMenu.prototype.contextListener = function() {
     var that = this;
-  document.addEventListener( "contextmenu", function(e) {
-    if ( that.containsClass( e, that.menuablesClass ) ) {
-      e.preventDefault();
-      that.openMenu();
-      that.selectedElement = e.target;
-      that.positionMenu(e);
-    } else {
-      that.closeMenu();
-    }
-  });
+    document.addEventListener( "contextmenu", function(e) {
+        if ( that.containsClass( e, that.menuablesClass ) ) {
+            e.preventDefault();
+            that.openMenu();
+            that.selectedElement = e.target;
+            that.positionMenu(e);
+        } else {
+            that.closeMenu();
+        }
+    });
+}
+
+PieContextMenu.prototype.leftClickListener = function() {
+    var that = this;
+    document.addEventListener( "click", function(e) {
+        var button = e.which || e.button;
+        if ( button === 1 ) {
+            that.closeMenu();
+        }
+    });
+}
+
+PieContextMenu.prototype.keyupListener = function() {
+    var that = this;
+    document.addEventListener("keydown", function (e) {
+        var keyCode = e.keyCode;
+        if(keyCode==27){
+            that.closeMenu();
+        }
+    }, false);
 }
 
 PieContextMenu.prototype.closeMenu =function() {
-  if ( this.menuState !== 0 ) {
-    this.menuState = 0;
-    this.menu.classList.remove(this.active);
-    this.selectedElement = null;
-  }
+    if ( this.menuState !== 0 ) {
+        this.menuState = 0;
+        this.menu.classList.remove(this.active);
+        this.selectedElement = null;
+    }
 }
 
 PieContextMenu.prototype.openMenu =function () {
@@ -241,6 +263,13 @@ PieContextMenu.prototype.resize = function (newSize) {
     this.reset();
 }
 
+PieContextMenu.prototype.addButton = function (text,icon) {
+    this.buttons[this.numberOfButton]= 
+        new PieContextMenu.Button(this.numberOfButton,text,icon);
+    this.numberOfButton++;
+    this.reset();
+}
+
 PieContextMenu.Button.prototype.changeText = function (newText) {
     this.text = newText;
     this.DOMelement.childNodes[1].textContent=this.text;
@@ -352,7 +381,3 @@ PieContextMenu.menu_button_mouseout = function (menu_button){
 }
 
 /* EVENT FUNCTION END */
-
-function deneme() {
-    console.log("Workssss");
-}
