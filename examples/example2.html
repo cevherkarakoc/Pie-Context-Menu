@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Pie Menu</title>
+  <BASE href="../">
+
+  <script src="./src/pie-cm.js"></script>
+
+	<link href="./src/pie-cm_core.css" rel="stylesheet" />
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" 
+  rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+  <style>
+      body{
+        background-color:#e4ea8c;
+        padding:0;
+        margin:0;
+      }
+
+    .pie-context-menu circle.pcm_center{
+      fill:rgba(0,0,0,0);
+    }
+
+    .pie-context-menu circle.pcm_button{
+      stroke:#69D2E7;
+      stroke-width: 33px;
+    }
+    .pie-context-menu circle.pcm_button--hover{
+      stroke: #A7DBD8;
+    }
+
+    .pie-context-menu text.pcm_title{
+      display:none;
+    }
+
+    .pie-context-menu text.pcm_icon{
+      fill:white;
+      font-size:26px;
+    }
+
+    .pie-context-menu text.pcm_icon--hover{
+      fill:#fd2538;
+    }
+
+    .item{
+      position:absolute;
+      width:100px;
+      height:100px;
+      padding:9px;
+      color:white;
+      font-size:20px;
+    }
+    #redo{
+      background-color:#cb0000;
+      left: 20%;
+      top: 150px;
+    }
+    #greenty{
+      background-color:#3f6c45;
+      left: 50%;
+      top: 150px;
+    }
+    #blueme{
+      background-color:#31a9b8;
+      left: 75%;
+      top: 150px;
+    }
+    i{
+      float:right;
+      
+    }
+  </style>
+</head>
+
+<body>
+  <div class="item" id="redo" ></div>
+  <div class="item" id="greenty" ></div>
+  <div class="item" id="blueme" ></div>
+
+  <script>
+    var my_menu = new PieContextMenu({
+      menuID:"my_menu",
+      menuItemClass:"item",
+      menuSize:220
+    });
+
+    my_menu.addButton("Move","fa-arrows");
+    my_menu.addButton("Rotate","fa-repeat");
+    my_menu.addButton("Text","fa-edit");
+    my_menu.addButton("Flip","fa-check");
+
+    my_menu.buttons[0].element.addEventListener("click",move,false);
+    my_menu.buttons[1].element.addEventListener("click",rotate,false);
+    my_menu.buttons[2].element.addEventListener("click",changeText,false);  
+    my_menu.buttons[3].element.addEventListener("click",check,false);  
+
+    var action = false;
+    var handler;
+    function move(e){
+      var item =  my_menu.lastSelectedElement;
+      var orgX = e.clientX-(item.offsetWidth/2);
+      var orgY = e.clientY-(item.offsetHeight/2);
+
+      item.style.setProperty("left",orgX+"px");
+      item.style.setProperty("top",orgY+"px");
+      item.style.cursor="move";
+      handler = function(inEvent){
+        action=true;
+        var x = inEvent.clientX-(item.offsetWidth/2);
+        var y = inEvent.clientY-(item.offsetHeight/2);
+
+        item.style.setProperty("left",x+"px");
+        item.style.setProperty("top",y+"px");
+      }
+
+      document.addEventListener("mousemove",handler);
+
+    }
+
+    function rotate(e){
+      var item =  my_menu.lastSelectedElement;
+      var orgX = my_menu.menuPosition.x;
+      var orgY = my_menu.menuPosition.y;
+      var nowRot = item.style.transform;
+      if(nowRot!=""){
+          nowRot = nowRot.substr(7);
+          nowRot = nowRot.substr(0,nowRot.length-4);
+        }else{
+          nowRot= 0;
+        }
+      item.style.cursor="crosshair";
+      handler = function(inEvent){
+        action=true;
+        var x = inEvent.clientX;
+        var y = inEvent.clientY;
+        x=(x-orgX);
+        y=(y-orgY);
+
+        var start =Math.PI/4+parseFloat(nowRot);
+        var rad = (cartesianToPolar(x,y).alpha+start);
+        item.style.transform = "rotate("+rad+"rad)";
+      }
+
+      document.addEventListener("mousemove",handler);
+
+    }
+
+     function changeText(e){
+      var item =  my_menu.lastSelectedElement;
+      var p = item.firstElementChild;
+      if(p!=null && p.tagName=="SPAN"){
+        item.removeChild(p);
+      }else{
+        p = document.createElement("span");
+        p.textContent = "Do Great Things";
+        item.insertBefore(p,item.childNodes[0]);
+      }
+    }
+
+    function check(e){
+      var item =  my_menu.lastSelectedElement;
+      var i = item.lastElementChild;
+      if(i!=null && i.tagName=="I"){
+        item.removeChild(i);
+      }else{
+        i = document.createElement("i");
+        i.classList.add("fa");
+        i.classList.add("fa-check");
+        i.classList.add("fa-3x");
+        item.appendChild(i);
+      }
+    }
+
+    document.addEventListener("click",function(){
+       if(action==true){
+         document.removeEventListener("mousemove", handler);
+         action=false;
+         my_menu.lastSelectedElement.style.cursor="default";
+       }
+    });
+
+    function cartesianToPolar(x,y){
+    return {
+          radius: Math.sqrt( Math.pow(x, 2) + Math.pow(y, 2) ),
+          alpha: Math.atan2(y, x)
+        }
+    }
+
+  </script>
+
+  
+</body>
