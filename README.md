@@ -12,12 +12,12 @@ Pie CM is a customizable and functional context menu (right-click menu) for HTML
 -----------
 
 **1- HTML:**
-* Download `pie-cm.min.js` and `pie-cm.min.cs` files.
+* Download `pie-cm.min.js` and `pie-cm_core.min.cs` files.
 Include them in your HTML
 
 ```html
 <script src="./dist/pie-cm.min.js"></script>
-<link href="./src/pie-cm.min.css" rel="stylesheet" />
+<link href="./src/pie-cm_core.min.css" rel="stylesheet" />
 ```
 * Add right clickable items
 ```html
