@@ -1,9 +1,11 @@
 # Pie Context Menu
 
+![alt text](./images/demo2.gif " Demo Gif " )
+
 ## Usage ##
 -----------
 
-**HTML:**
+**1- HTML:**
 * Download `pie-cm.min.js` and `pie-cm.min.cs` files.
 Include them in your HTML
 
@@ -17,7 +19,7 @@ Include them in your HTML
 <... class="menuable" ...> ITEM 2 </...>
 ```
 
-**JavaScript:**
+**2- JavaScript:**
 
 
 
@@ -37,8 +39,40 @@ my_menu.addButton("Delete","fa-trash");
 
 * Add Event Listener to Button
 ```javascript
-my_menu.buttons[0].DOMelement.addEventListener("click",myFunc,false);
+my_menu.buttons[0].element.addEventListener("click",myFunc,false);
 ```
+
+## Customize ##
+-----------
+
+![alt text](./images/colorful.png " Colorful Sample " )
+```css
+.pie-context-menu circle.pcm_center{
+    fill:#80BD9E;
+}
+
+.pie-context-menu circle.pcm_button{
+    stroke:#FFB85F;
+}
+    
+.pie-context-menu circle.pcm_button--hover{
+    stroke: #FF7A5A;
+}
+
+.pie-context-menu text.pcm_title{
+    fill:white;
+}
+
+.pie-context-menu text.pcm_icon{
+    fill:white;
+    font-size:32px;
+}
+
+.pie-context-menu text.pcm_icon--hover{
+    fill:#763626;
+}
+```
+
 ## Useful Methods ##
 -----------
 
