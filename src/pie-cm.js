@@ -7,6 +7,7 @@ var PieContextMenu=function (menuObject) {
 
     this.menu;
     this.menu_id = menuObject.menuID;
+    this.menuPosition;
 
     this.menu_svg;
     this.menu_svg_id= this.menu_id+"_svg";
@@ -21,7 +22,7 @@ var PieContextMenu=function (menuObject) {
     this.stroke_width;
     this.font_size;
 
-    this.selectedElement=null;
+    this.lastSelectedElement=null;
 
     this.buttons = [];
 
@@ -33,7 +34,7 @@ PieContextMenu.Button = function (index,text,icon) {
     this.text  = text;
     this.icon = icon;
     this.isNew = true;
-    this.DOMelement;
+    this.element;
 }
 
 PieContextMenu.prototype.init = function() {
@@ -43,12 +44,6 @@ PieContextMenu.prototype.init = function() {
 
     this.center = document.createElementNS(SVG_NS,"circle");  
     this.menu_svg.appendChild(this.center);
-
-    for(var i=0;i<this.numberOfButton;i++){
-        var text="Button "+(i+1);
-        var icon="fa-circle";
-        this.buttons[i] = new PieContextMenu.Button(i,text,icon);
-    }
 
     this.reset();
     this.create();
@@ -92,11 +87,13 @@ PieContextMenu.prototype.reset = function () {
 PieContextMenu.prototype.contextListener = function() {
     var that = this;
     document.addEventListener( "contextmenu", function(e) {
-        if ( that.containsClass( e, that.menuablesClass ) ) {
+        var selected = that.containsClass( e, that.menuablesClass ) ;
+        if ( selected ) {
             e.preventDefault();
+            that.lastSelectedElement = selected;
             that.openMenu();
-            that.selectedElement = e.target;
             that.positionMenu(e);
+            
         } else {
             that.closeMenu();
         }
@@ -127,7 +124,6 @@ PieContextMenu.prototype.closeMenu =function() {
     if ( this.menuState !== 0 ) {
         this.menuState = 0;
         this.menu.classList.remove(this.active);
-        this.selectedElement = null;
     }
 }
 
@@ -140,7 +136,7 @@ PieContextMenu.prototype.openMenu =function () {
 }
 
 PieContextMenu.prototype.positionMenu = function(e) {
-  var menuPosition = this.getPosition(e);
+  this.menuPosition = this.getPosition(e);
   
   var menuWidth = this.menu.offsetWidth ;
   var menuHeight = this.menu.offsetHeight ;
@@ -148,19 +144,19 @@ PieContextMenu.prototype.positionMenu = function(e) {
   var windowWidth = window.innerWidth;
   var windowHeight = window.innerHeight;
 
-  if ( (windowWidth -  menuPosition.x) < menuWidth ) {
+  if ( (windowWidth -  this.menuPosition.x) < menuWidth ) {
     this.menu.style.left = (windowWidth - menuWidth) + "px";
   } else {
-    this.menu.style.left = (menuPosition.x-menuWidth/2) + "px";
+    this.menu.style.left = (this.menuPosition.x-menuWidth/2) + "px";
   }
 
-  if ( (windowHeight - menuPosition.y) < menuHeight ) {
+  if ( (windowHeight - this.menuPosition.y) < menuHeight ) {
     this.menu.style.top = (windowHeight - menuHeight) + "px";
   } else {
-    this.menu.style.top = (menuPosition.y-menuHeight/2) + "px";
+    this.menu.style.top = (this.menuPosition.y-menuHeight/2) + "px";
   }
-
-
+  this.menu.style.left = (this.menuPosition.x-menuWidth/2) + "px";
+  this.menu.style.top = (this.menuPosition.y-menuHeight/2) + "px";
 }
 
 PieContextMenu.prototype.containsClass = function ( e, className ) {
@@ -238,16 +234,16 @@ PieContextMenu.prototype.createMenuButton = function (button){
         menu_button_G.appendChild(button_icon);
     
         this.menu_svg.appendChild(menu_button_G);
-        button.DOMelement=menu_button_G;
+        button.element=menu_button_G;
         
         this.buttons[index].isNew=false;
     }else{
-        var menu_button_G = this.buttons[index].DOMelement;
-        var menu_button =this.buttons[index].DOMelement.childNodes[0];
-        var button_title = this.buttons[index].DOMelement.childNodes[1];
-        var button_icon = this.buttons[index].DOMelement.childNodes[2];
+        var menu_button_G = this.buttons[index].element;
+        var menu_button =this.buttons[index].element.childNodes[0];
+        var button_title = this.buttons[index].element.childNodes[1];
+        var button_icon = this.buttons[index].element.childNodes[2];
         
-        var g_id=this.buttons[index].DOMelement.id;
+        var g_id=this.buttons[index].element.id;
     }
 
     PieContextMenu.setMenuButtonG(menu_button_G,g_id,this.menuSize);
@@ -272,13 +268,13 @@ PieContextMenu.prototype.addButton = function (text,icon) {
 
 PieContextMenu.Button.prototype.changeText = function (newText) {
     this.text = newText;
-    this.DOMelement.childNodes[1].textContent=this.text;
+    this.element.childNodes[1].textContent=this.text;
 }
 
 PieContextMenu.Button.prototype.changeIcon = function (newIcon) {
     this.icon = newIcon;
     var cont = PieContextMenu.faviconClassToText(this.icon);
-    this.DOMelement.childNodes[2].textContent=cont;
+    this.element.childNodes[2].textContent=cont;
 }
 
 /* HELPER METHODS */

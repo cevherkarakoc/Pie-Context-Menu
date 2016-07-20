@@ -1,6 +1,6 @@
 {
   "name": "pie-context-menu",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Pie Menu for Webpages",
   "main": "src/pie-cm.js",
   "directories": {
