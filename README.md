@@ -2,6 +2,12 @@
 
 ![alt text](./images/demo2.gif " Demo Gif " )
 
+Pie CM is a customizable and functional context menu (right-click menu) for HTML page.
+
+[Demo 1 - (Basic)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo1.html) | | 
+[Demo 1 - (Stylized)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo2.html) | | 
+[Demo 1 - (Responsive)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo3.html)
+
 ## Usage ##
 -----------
 
@@ -79,8 +85,8 @@ my_menu.buttons[0].element.addEventListener("click",myFunc,false);
 ```javascript
 my_menu.resize(300) //resize the menu;
 
-my_menu.openMenu //open the menu;
-my_menu.closeMenu //close the menu;
+my_menu.openMenu() //open the menu;
+my_menu.closeMenu() //close the menu;
 
 my_menu.buttons[index].changeText("NEW TEXT");
 my_menu.buttons[index].changeIcon("fa-new");
