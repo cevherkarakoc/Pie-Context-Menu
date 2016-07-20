@@ -45,7 +45,7 @@ my_menu.buttons[0].element.addEventListener("click",myFunc,false);
 ## Customize ##
 -----------
 
-![alt text](./images/colorful.png " Colorful Sample " )
+![alt text](./images/colorful.PNG " Colorful Sample " )
 ```css
 .pie-context-menu circle.pcm_center{
     fill:#80BD9E;
