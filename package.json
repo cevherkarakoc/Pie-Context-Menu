@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cevherkarakoc/HTML-Pie-Context-Menu.git"
+    "url": "git+https://github.com/cevherkarakoc/Pie-Context-Menu.git"
   },
   "keywords": [
     "context",
@@ -22,9 +22,9 @@
   "author": "Cevher V. Karakoc",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/cevherkarakoc/HTML-Pie-Context-Menu/issues"
+    "url": "https://github.com/cevherkarakoc/Pie-Context-Menu/issues"
   },
-  "homepage": "https://github.com/cevherkarakoc/HTML-Pie-Context-Menu#readme",
+  "homepage": "https://github.com/cevherkarakoc/Pie-Context-Menu#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-clean-css": "^2.0.11",
