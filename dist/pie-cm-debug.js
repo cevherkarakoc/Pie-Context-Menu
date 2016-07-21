@@ -23,7 +23,6 @@ var PieContextMenu=function (menuObject) {
     this.font_size;
 
     this.lastSelectedElement=null;
-
     this.buttons = [];
 
     this.init();
@@ -144,19 +143,26 @@ PieContextMenu.prototype.positionMenu = function(e) {
   var windowWidth = window.innerWidth;
   var windowHeight = window.innerHeight;
 
-  if ( (windowWidth -  this.menuPosition.x) < menuWidth ) {
-    this.menu.style.left = (windowWidth - menuWidth) + "px";
-  } else {
-    this.menu.style.left = (this.menuPosition.x-menuWidth/2) + "px";
+  var left = this.menuPosition.x-menuWidth/2;
+  var top = this.menuPosition.y-menuHeight/2;
+
+
+  if(this.menuPosition.x<menuWidth/2){
+      left=0;
+  }
+  else if(this.menuPosition.x>(windowWidth-menuWidth/2)){
+      left-=menuWidth/2;
   }
 
-  if ( (windowHeight - this.menuPosition.y) < menuHeight ) {
-    this.menu.style.top = (windowHeight - menuHeight) + "px";
-  } else {
-    this.menu.style.top = (this.menuPosition.y-menuHeight/2) + "px";
+  if(this.menuPosition.y<menuHeight/2){
+      top=0;
   }
-  this.menu.style.left = (this.menuPosition.x-menuWidth/2) + "px";
-  this.menu.style.top = (this.menuPosition.y-menuHeight/2) + "px";
+  else if(this.menuPosition.y>(windowHeight-menuHeight/2)){
+      top-=menuHeight/2;
+  }
+
+  this.menu.style.left = left+ "px";
+  this.menu.style.top = top + "px";
 }
 
 PieContextMenu.prototype.containsClass = function ( e, className ) {
@@ -329,7 +335,6 @@ PieContextMenu.setMenuIcon = function (button_icon,icon,radius,index,numberOfBut
     button_icon.setAttribute("x", dot.x);
     button_icon.setAttribute("y", -dot.y);
     button_icon.setAttribute("dy", "0.35em");
-    button_icon.setAttribute("font-family", "FontAwesome");
     button_icon.setAttribute("font-size",font_size);
     return button_icon;
 }
