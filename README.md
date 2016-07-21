@@ -5,8 +5,8 @@
 Pie CM is a customizable and functional context menu (right-click menu) for HTML page.
 
 [Demo 1 - (Basic)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo1.html) | | 
-[Demo 1 - (Stylized)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo2.html) | | 
-[Demo 1 - (Responsive)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo3.html)
+[Demo 2 - (Stylized)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo2.html) | | 
+[Demo 3 - (Responsive)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo3.html)
 
 ## Installation ##
 
