@@ -8,17 +8,32 @@ Pie CM is a customizable and functional context menu (right-click menu) for HTML
 [Demo 1 - (Stylized)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo2.html) | | 
 [Demo 1 - (Responsive)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo3.html)
 
+## Installation ##
+
+### Standalone
+Download `pie-cm.min.js` and `pie-cm_core.min.cs` files.
+Include them in your HTML
+
+```html
+<script src="dist/pie-cm.min.js"></script>
+<link href="dist/pie-cm_core.min.css" rel="stylesheet" />
+```
+
+### Bower
+```
+$ bower install pie-cm
+```
+
+```html
+<script src="bower_components/dist/pie-cm.min.js"></script>
+<link href="bower_components/dist/pie-cm_core.min.css" rel="stylesheet" />
+```
+
 ## Usage ##
 -----------
 
 **1- HTML:**
-* Download `pie-cm.min.js` and `pie-cm_core.min.cs` files.
-Include them in your HTML
 
-```html
-<script src="./dist/pie-cm.min.js"></script>
-<link href="./src/pie-cm_core.min.css" rel="stylesheet" />
-```
 * Add right clickable items
 ```html
 <... class="menuable" ...> ITEM 1 </...>
@@ -72,6 +87,7 @@ my_menu.buttons[0].element.addEventListener("click",myFunc,false);
 .pie-context-menu text.pcm_icon{
     fill:white;
     font-size:32px;
+    font-family:FontAwesome;
 }
 
 .pie-context-menu text.pcm_icon--hover{

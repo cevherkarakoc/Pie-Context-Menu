@@ -14,7 +14,6 @@
 
 .pie-context-menu svg {
   width: 100%;
-
 }
 
 .pie-context-menu circle {
@@ -55,6 +54,7 @@
 
 .pie-context-menu text.pcm_icon{
   fill:#222;
+  font-family: FontAwesome;
 }
 
 .pie-context-menu text.pcm_icon--hover{
