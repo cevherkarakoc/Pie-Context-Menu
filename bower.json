@@ -1,0 +1,30 @@
+{
+  "name": "pie-cm",
+  "description": "A Circular Context Menu",
+  "main": [
+    "src/pie-cm.js",
+    "src/pie-cm_core.css"
+  ],
+  "authors": [
+    "Cevher V. Karakoc <cevherkarakoc@live.com>"
+  ],
+  "license": "GPL-3.0",
+  "keywords": [
+    "context",
+    "menu",
+    "right",
+    "click"
+  ],
+  "homepage": "https://github.com/cevherkarakoc/Pie-Context-Menu",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cevherkarakoc/Pie-Context-Menu.git"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
