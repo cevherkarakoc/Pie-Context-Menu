@@ -1,18 +1,18 @@
 # Pie Context Menu
 
-![alt text](./images/demo2.gif " Demo Gif " )
+![alt text](../images/demo2.gif " Demo Gif " )
 
-Pie CM is a customizable and functional context menu (right-click menu) for HTML page.
+Pie CM, html sayfalar için yapılmış özelleştirilebilir, fonksiyonel bir açılır menüdür. (sağ tık menüsü)
 
-[Demo 1 - (Basic)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo1.html) | | 
-[Demo 2 - (Stylized)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo2.html) | | 
-[Demo 3 - (Responsive)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo3.html)
+[Örnek 1 - (Basic)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo1.html) | | 
+[Örnek 2 - (Stylized)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo2.html) | | 
+[Örnek 3 - (Responsive)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo3.html)
 
-## Installation ##
+## Kurulum ##
 
-### Standalone
-Download `pie-cm.min.js` and `pie-cm_core.min.cs` files.
-Include them in your HTML
+### Bağımsız
+`pie-cm.min.js` ve `pie-cm_core.min.cs` dosyalarını indirin.
+Ardından HTML'in içine ekleyin.
 
 ```html
 <script src="dist/pie-cm.min.js"></script>
@@ -29,12 +29,11 @@ $ bower install pie-cm
 <link href="bower_components/dist/pie-cm_core.min.css" rel="stylesheet" />
 ```
 
-## Usage ##
 -----------
 
 **1- HTML:**
 
-* Add right clickable items
+* Sağ tıklanabilir elementleri ekleyin.
 ```html
 <... class="menuable" ...> ITEM 1 </...>
 <... class="menuable" ...> ITEM 2 </...>
@@ -43,8 +42,7 @@ $ bower install pie-cm
 **2- JavaScript:**
 
 
-
-* Create Menu
+* Menüyü oluşturun
 ```javascript
 var my_menu = new PieContextMenu({
     menuID:"my_menu",
@@ -53,20 +51,20 @@ var my_menu = new PieContextMenu({
 });
 ```
 
-* Create Menu Button
+* Menü düğmelerini ekleyin
 ```javascript
-my_menu.addButton("Delete","fa-trash");
+my_menu.addButton("Sil","fa-trash");
 ```
 
-* Add Event Listener to Button
+* Düğmeye 'event' dinleyicisi ekleyin
 ```javascript
 my_menu.buttons[0].element.addEventListener("click",myFunc,false);
 ```
 
-## Customize ##
+## Özelleştirme ##
 -----------
 
-![alt text](./images/colorful.PNG " Colorful Sample " )
+![alt text](../images/colorful.PNG " Colorful Sample " )
 ```css
 .pie-context-menu circle.pcm_center{
     fill:#80BD9E;
@@ -95,14 +93,13 @@ my_menu.buttons[0].element.addEventListener("click",myFunc,false);
 }
 ```
 
-## Useful Methods ##
 -----------
 
 ```javascript
-my_menu.resize(300) //resize the menu;
+my_menu.resize(300) // menüyü yeniden boyutlandırır;
 
-my_menu.openMenu() //open the menu;
-my_menu.closeMenu() //close the menu;
+my_menu.openMenu() // menüyü açar;
+my_menu.closeMenu() // menüyü kapar;
 
 my_menu.buttons[index].changeText("NEW TEXT");
 my_menu.buttons[index].changeIcon("fa-new");
@@ -110,7 +107,7 @@ my_menu.buttons[index].changeIcon("fa-new");
 
 ```
 
-## License ##
+## Lisans ##
 -----------
-### Licensed under GPLv3
+### GPLv3 ile lisanslıdır
 ![alt text](https://www.gnu.org/graphics/gplv3-127x51.png " GPLv3 " )
