@@ -29,6 +29,7 @@ $ bower install pie-cm
 <link href="bower_components/dist/pie-cm_core.min.css" rel="stylesheet" />
 ```
 
+## Kullanım ##
 -----------
 
 **1- HTML:**
@@ -93,6 +94,7 @@ my_menu.buttons[0].element.addEventListener("click",myFunc,false);
 }
 ```
 
+## İşe yarar Metodlar ##
 -----------
 
 ```javascript
