@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Pie Menu</title>
+  <BASE href="../">
+
+  <script src="./src/pie-cm.js"></script>
+
+	<link href="./src/pie-cm_core.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <style>
+    body{
+      font-family: Sans-serif;
+      background-color:#ff7850;
+      color:white;
+    }
+    .menuable{
+      width: 200px;
+      height: 200px;
+      background-color: #BCFFA5;
+      color:#444;
+      border-radius:3px;
+      position: absolute;
+      top:0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      text-align:center;
+      line-height:200px;
+      box-shadow:0px 8px 16px 0px rgba(0,0,0,0.2), 0px 6px 16px 0px rgba(0,0,0,0.19);
+      font-size:21px;
+      -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+      cursor:context-menu;
+    }
+
+    #my_menu .pcm_title{
+      font-size:16px;
+      fill:white;
+    }
+    #my_menu .pcm_icon{
+      font-size:28px;
+      font-family:"Material Icons";
+      font-feature-settings:"liga" 1;
+    }
+    #my_menu .pcm_center{
+      fill:rgba(0,0,0,0.5)
+    }
+  </style>
+</head>
+
+<body>
+  <center><h1>Pie Context Menu Demo 4 - Google Icons</h1></center>
+
+  <div id="first" class="menuable"> Right Click Me!!! </div>
+
+
+  <script>
+    var my_menu = new PieContextMenu({
+      menuID:"my_menu",
+      menuItemClass:"menuable",
+      menuSize:256
+    });
+
+    my_menu.addButton("Delete",'delete');
+    my_menu.addButton("Change Color","loop");
+    my_menu.addButton("Release","android");
+
+    my_menu.buttons[0].element.addEventListener("click",sayIm,false);
+    my_menu.buttons[1].element.addEventListener("click",cColor,false);
+    my_menu.buttons[2].element.addEventListener("click",secret,false);  
+
+    function sayIm(message){
+      alert("I am immortal");
+    }
+
+    function cColor(){
+      my_menu.lastSelectedElement.style.backgroundColor = '#'+Math.floor(Math.random()*16777215).toString(16);;
+    }
+
+    var sh=16;
+    var ri=0;
+    function secret(){
+      var elm = document.getElementById("first");
+      sh+=10;
+      ri+=10;
+      var shadow = "0px 8px "+sh+"px "+ri+"px";
+      elm.style.boxShadow = shadow+" rgba(0,0,0,0.2), "+shadow+" rgba(0,0,0,0.19)";
+    }
+
+  </script>
+
+  
+</body>
