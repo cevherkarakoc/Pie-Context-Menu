@@ -4,9 +4,10 @@
 
 Pie CM is a customizable and functional context menu (right-click menu) for HTML page.
 
-[Demo 1 - (Basic)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo1.html) | | 
-[Demo 2 - (Stylized)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo2.html) | | 
-[Demo 3 - (Responsive)](https://cevherkarakoc.github.io/Pie-Context-Menu/demos/demo3.html)
+[Demo 1 - (Basic)](https://rawgit.com/cevherkarakoc/Pie-Context-Menu/master/examples/example1.html) | | 
+[Demo 2 - (Stylized)](https://rawgit.com/cevherkarakoc/Pie-Context-Menu/master/examples/example2.html) | | 
+[Demo 3 - (Responsive)](https://rawgit.com/cevherkarakoc/Pie-Context-Menu/master/examples/example3.html) | | 
+[Demo 4 - (Google Icons)](https://rawgit.com/cevherkarakoc/Pie-Context-Menu/master/examples/example4.html)
 
 ## Installation ##
 
@@ -55,7 +56,7 @@ var my_menu = new PieContextMenu({
 
 * Create Menu Button
 ```javascript
-my_menu.addButton("Delete","fa-trash");
+my_menu.addButton("Delete","\uf1f8");
 ```
 
 * Add Event Listener to Button
@@ -105,7 +106,7 @@ my_menu.openMenu() //open the menu;
 my_menu.closeMenu() //close the menu;
 
 my_menu.buttons[index].changeText("NEW TEXT");
-my_menu.buttons[index].changeIcon("fa-new");
+my_menu.buttons[index].changeIcon("\uf1ea");
 
 
 ```

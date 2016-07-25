@@ -279,8 +279,8 @@ PieContextMenu.Button.prototype.changeText = function (newText) {
 
 PieContextMenu.Button.prototype.changeIcon = function (newIcon) {
     this.icon = newIcon;
-    var cont = PieContextMenu.faviconClassToText(this.icon);
-    this.element.childNodes[2].textContent=cont;
+    //var cont = PieContextMenu.faviconClassToText(this.icon);
+    this.element.childNodes[2].textContent=newIcon;
 }
 
 /* HELPER METHODS */
@@ -325,12 +325,12 @@ PieContextMenu.setMenuTitle = function (button_title,text,font_size) {
 }
 
 PieContextMenu.setMenuIcon = function (button_icon,icon,radius,index,numberOfButton,font_size) {
-    var cont = PieContextMenu.faviconClassToText(icon);
+    //var cont = PieContextMenu.faviconClassToText(icon);
     var rot = -180+((360/numberOfButton)*index);
     
     var iconRot = -1*(rot+(180/numberOfButton));
     var dot = PieContextMenu.polarToCartesian(radius,iconRot);
-    button_icon.textContent = cont;
+    button_icon.textContent = icon;
     button_icon.setAttribute("class","pcm_icon");
     button_icon.setAttribute("x", dot.x);
     button_icon.setAttribute("y", -dot.y);
