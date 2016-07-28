@@ -110,6 +110,9 @@ my_menu.buttons[index].changeIcon("\uf1ea");
 
 
 ```
+## Contributors ##
+* [cevherkarakoc](https://github.com/cevherkarakoc)
+* [mister-walter](https://github.com/mister-walter)
 
 ## License ##
 -----------
