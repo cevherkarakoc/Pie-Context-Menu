@@ -283,11 +283,13 @@ PieContextMenu.setMenuButtonG = function (menu_button_G, id, size) {
     menu_button_G.setAttribute("class", "pcm_group");
     menu_button_G.setAttribute("transform",
         "translate(" + size/2 + "," + size/2 + ")");
-    menu_button_G.setAttribute("onmouseover",
-        "PieContextMenu.menu_button_mouseover(this)");
-    menu_button_G.setAttribute("onmouseout",
-        "PieContextMenu.menu_button_mouseout(this)");
-   // menu_button_G.setAttribute("onclick","deneme()");
+    menu_button_G.addEventListener("mouseover", function (e) {
+        PieContextMenu.menu_button_mouseover(this);
+    });
+    menu_button_G.addEventListener("mouseout", function (e) {
+        PieContextMenu.menu_button_mouseout(this);
+    });
+    // menu_button_G.setAttribute("onclick","deneme()");
     return menu_button_G;
 };
 
