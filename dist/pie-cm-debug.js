@@ -18,6 +18,8 @@ var PieContextMenu=function (menuObject) {
     this.active = "pie-context-menu--active";
     this.menuSize = menuObject.menuSize;
 
+    this.menuActivateEvent = menuObject.menuActivateEvent || "contextmenu";
+
     this.radius;
     this.stroke_width;
     this.font_size;
@@ -47,7 +49,7 @@ PieContextMenu.prototype.init = function() {
     this.reset();
     this.create();
 
-    this.contextListener();
+    this.menuActivateListener(this.menuActivateEvent);
     this.leftClickListener();
     this.keyupListener();
 }
@@ -83,9 +85,9 @@ PieContextMenu.prototype.reset = function () {
     this.draw(); 
 }
 
-PieContextMenu.prototype.contextListener = function() {
+PieContextMenu.prototype.menuActivateListener = function (event) {
     var that = this;
-    document.addEventListener( "contextmenu", function(e) {
+    document.addEventListener( event, function(e) {
         var selected = that.containsClass( e, that.menuablesClass ) ;
         if ( selected ) {
             e.preventDefault();
@@ -279,8 +281,8 @@ PieContextMenu.Button.prototype.changeText = function (newText) {
 
 PieContextMenu.Button.prototype.changeIcon = function (newIcon) {
     this.icon = newIcon;
-    var cont = PieContextMenu.faviconClassToText(this.icon);
-    this.element.childNodes[2].textContent=cont;
+    //var cont = PieContextMenu.faviconClassToText(this.icon);
+    this.element.childNodes[2].textContent=newIcon;
 }
 
 /* HELPER METHODS */
@@ -325,12 +327,12 @@ PieContextMenu.setMenuTitle = function (button_title,text,font_size) {
 }
 
 PieContextMenu.setMenuIcon = function (button_icon,icon,radius,index,numberOfButton,font_size) {
-    var cont = PieContextMenu.faviconClassToText(icon);
+    //var cont = PieContextMenu.faviconClassToText(icon);
     var rot = -180+((360/numberOfButton)*index);
     
     var iconRot = -1*(rot+(180/numberOfButton));
     var dot = PieContextMenu.polarToCartesian(radius,iconRot);
-    button_icon.textContent = cont;
+    button_icon.textContent = icon;
     button_icon.setAttribute("class","pcm_icon");
     button_icon.setAttribute("x", dot.x);
     button_icon.setAttribute("y", -dot.y);
