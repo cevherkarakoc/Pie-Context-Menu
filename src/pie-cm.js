@@ -48,7 +48,7 @@ PieContextMenu.prototype.init = function () {
     this.reset();
     this.create();
 
-    this.menuActivateEvent(this.menuActivateEvent);
+    this.menuActivateListener(this.menuActivateEvent);
     this.leftClickListener();
     this.keyupListener();
 };
