@@ -18,6 +18,8 @@ var PieContextMenu=function (menuObject) {
     this.active = "pie-context-menu--active";
     this.menuSize = menuObject.menuSize;
 
+    this.menuActivateEvent = menuObject.menuActivateEvent || "contextmenu";
+
     this.radius;
     this.stroke_width;
     this.font_size;
@@ -47,7 +49,7 @@ PieContextMenu.prototype.init = function() {
     this.reset();
     this.create();
 
-    this.contextListener();
+    this.menuActivateEvent(this.menuActivateEvent);
     this.leftClickListener();
     this.keyupListener();
 }
@@ -83,9 +85,9 @@ PieContextMenu.prototype.reset = function () {
     this.draw(); 
 }
 
-PieContextMenu.prototype.contextListener = function() {
+PieContextMenu.prototype.menuActivateListener = function (event) {
     var that = this;
-    document.addEventListener( "contextmenu", function(e) {
+    document.addEventListener( event, function(e) {
         var selected = that.containsClass( e, that.menuablesClass ) ;
         if ( selected ) {
             e.preventDefault();
